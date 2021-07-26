@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-service-app
+  labels:
+    app: products-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products-service-app
+  template:
+    metadata:
+      labels:
+        app: products-service-app
+    spec:
+      containers:
+      - name: products-service-app
+        image: abhijitmishra2632/products-service:0.0.1
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 9005
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: products-service-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: products-service-app
+  ports:
+  - port: 80
+    targetPort: 9005

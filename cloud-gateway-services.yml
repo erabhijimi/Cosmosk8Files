@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-gateway-services-app
+  labels:
+    app: cloud-gateway-services-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cloud-gateway-services-app
+  template:
+    metadata:
+      labels:
+        app: cloud-gateway-services-app
+    spec:
+      containers:
+      - name: cloud-gateway-services-app
+        image: abhijitmishra2632/cloud-gateway-services:0.0.1
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 9191
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-gateway-services-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: cloud-gateway-services
+  ports:
+  - port: 80
+    targetPort: 9191
+    protocol: TCP
