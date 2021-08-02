@@ -24,6 +24,7 @@ metadata:
     app: mysql
     tier: database
 spec:
+  storageClassName: manual
   accessModes:
     - ReadWriteOnce   #This specifies the mode of the claim that we are trying to create.
   resources:
@@ -77,3 +78,12 @@ spec:
       - name: mysql-persistent-storage # Obtaining 'vloume' from PVC
         persistentVolumeClaim:
           claimName: mysql-pv-claim
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: manual
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-standard
+  replication-type: none
